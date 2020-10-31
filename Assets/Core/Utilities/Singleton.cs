@@ -14,10 +14,7 @@ namespace Assets.Core.Utilities
         {
             get { return instance != null; }
         }
-		protected virtual void OnEnable()
-        {
-			Debug.Log("Singleton::Enabled");
-		}
+		 
 		protected virtual void Awake()
 		{
 			if (instanceExists)
@@ -26,7 +23,6 @@ namespace Assets.Core.Utilities
 			}
 			else
 			{
-				Debug.Log("Singleton::Created");
 				instance = (T)this;
 			}
 		}

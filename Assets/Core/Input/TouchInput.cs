@@ -49,7 +49,7 @@ namespace Assets.Core.Input
 		/// <summary>
 		/// Register input events
 		/// </summary>
-		protected virtual void OnEnable()
+		protected virtual void Start()
 		{
 			if (!InputController.instanceExists)
 			{
@@ -193,23 +193,10 @@ namespace Assets.Core.Input
 			{
 				// We have a flick!
 				// Work out velocity from motion
-				Ray prevRay = cameraRig.CachedCamera.ScreenPointToRay(pointer.currentPosition -
-																		pointer.flickVelocity);
-				Ray currRay = cameraRig.CachedCamera.ScreenPointToRay(pointer.currentPosition);
-
-				Vector3 startPoint = Vector3.zero;
-				Vector3 endPoint = Vector3.zero;
-				float dist;
-
-				if (cameraRig.FloorPlane.Raycast(prevRay, out dist))
-				{
-					startPoint = prevRay.GetPoint(dist);
-				}
-				if (cameraRig.FloorPlane.Raycast(currRay, out dist))
-				{
-					endPoint = currRay.GetPoint(dist);
-				}
-
+				Vector3 startPoint = cameraRig.GetRaycastWorldPointOnTargetSurface(pointer.currentPosition -
+																		pointer.flickVelocity, Vector3.zero);
+				Vector3 endPoint = cameraRig.GetRaycastWorldPointOnTargetSurface(pointer.currentPosition, Vector3.zero);
+				 
 				// Work out that movement in units per second
 				m_FlickDirection = (startPoint - endPoint) / Time.deltaTime;
 			}
@@ -223,24 +210,10 @@ namespace Assets.Core.Input
 			var touchInfo = pointer as TouchInfo;
 			if (touchInfo != null)
 			{
-				// Work out movement amount by raycasting onto floor plane from delta positions
-				// and getting that distance
-				Ray currRay = cameraRig.CachedCamera.ScreenPointToRay(touchInfo.currentPosition);
+				Vector3 endPoint = cameraRig.GetRaycastWorldPointOnTargetSurface(pointer.currentPosition, Vector3.zero);
+				Vector3 startPoint = cameraRig.GetRaycastWorldPointOnTargetSurface(pointer.previousPosition, Vector3.zero);
 
-				Vector3 endPoint = Vector3.zero;
-				float dist;
-				if (cameraRig.FloorPlane.Raycast(currRay, out dist))
-				{
-					endPoint = currRay.GetPoint(dist);
-				}
-				// Pan
-				Ray prevRay = cameraRig.CachedCamera.ScreenPointToRay(touchInfo.previousPosition);
-				Vector3 startPoint = Vector3.zero;
-
-				if (cameraRig.FloorPlane.Raycast(prevRay, out dist))
-				{
-					startPoint = prevRay.GetPoint(dist);
-				}
+				Debug.DrawLine(startPoint, endPoint,Color.cyan);
 				Vector3 panAmount = startPoint - endPoint;
 				// If this is a touch, we divide the pan amount by the number of touches
 				if (UnityInput.touchCount > 0)
@@ -270,16 +243,7 @@ namespace Assets.Core.Input
 
 			// First get floor position of middle of gesture
 			Vector2 averageScreenPos = (pinch.touch1.currentPosition + pinch.touch2.currentPosition) * 0.5f;
-			Ray ray = cameraRig.CachedCamera.ScreenPointToRay(averageScreenPos);
-
-			Vector3 worldPos = Vector3.zero;
-			float dist;
-
-			if (cameraRig.FloorPlane.Raycast(ray, out dist))
-			{
-				worldPos = ray.GetPoint(dist);
-			}
-
+			Vector3 worldPos = cameraRig.GetRaycastWorldPointOnTargetSurface(averageScreenPos, Vector3.zero);
 			// Vector from our current look pos to this point 
 			Vector3 offsetValue = worldPos - cameraRig.LookPosition;
 

@@ -46,7 +46,7 @@ namespace Assets.Core.Input
 		/// <summary>
 		/// Register input events
 		/// </summary>
-		protected virtual void OnEnable()
+		protected virtual void Start()
 		{
 			Debug.Log("KeyboardMouseInput::CheckInputController");
 			if (!InputController.instanceExists)
@@ -99,6 +99,7 @@ namespace Assets.Core.Input
 		{
 			if (cameraRig != null)
 			{
+				 
 				DoRightMouseDragPan(pointer);
 			}
 		}
@@ -108,6 +109,7 @@ namespace Assets.Core.Input
 		/// </summary>
 		protected virtual void OnWheel(WheelInfo wheel)
 		{
+			 
 			if (cameraRig != null)
 			{
 				DoWheelZoom(wheel);
@@ -155,7 +157,7 @@ namespace Assets.Core.Input
 			// Left
 			if (UnityInput.GetKey(KeyCode.LeftArrow) || UnityInput.GetKey(KeyCode.A))
 			{
-				cameraRig.PanCamera(Vector3.left * Time.deltaTime * mouseEdgePanSpeed * zoomRatio);
+				cameraRig.PanCamera(cameraRig.GetLeftVector() * Time.deltaTime * mouseEdgePanSpeed * zoomRatio);
 
 				cameraRig.StopTracking();
 			}
@@ -163,7 +165,7 @@ namespace Assets.Core.Input
 			// Right
 			if (UnityInput.GetKey(KeyCode.RightArrow) || UnityInput.GetKey(KeyCode.D))
 			{
-				cameraRig.PanCamera(Vector3.right * Time.deltaTime * mouseEdgePanSpeed * zoomRatio);
+				cameraRig.PanCamera(cameraRig.GetRightVector() * Time.deltaTime * mouseEdgePanSpeed * zoomRatio);
 
 				cameraRig.StopTracking();
 			}
@@ -171,7 +173,7 @@ namespace Assets.Core.Input
 			// Down
 			if (UnityInput.GetKey(KeyCode.DownArrow) || UnityInput.GetKey(KeyCode.S))
 			{
-				cameraRig.PanCamera(Vector3.back * Time.deltaTime * mouseEdgePanSpeed * zoomRatio);
+				cameraRig.PanCamera(cameraRig.GetDownVector()* Time.deltaTime * mouseEdgePanSpeed * zoomRatio);
 
 				cameraRig.StopTracking();
 			}
@@ -179,7 +181,7 @@ namespace Assets.Core.Input
 			// Up
 			if (UnityInput.GetKey(KeyCode.UpArrow) || UnityInput.GetKey(KeyCode.W))
 			{
-				cameraRig.PanCamera(Vector3.forward * Time.deltaTime * mouseEdgePanSpeed * zoomRatio);
+				cameraRig.PanCamera(cameraRig.GetUpVector() * Time.deltaTime * mouseEdgePanSpeed * zoomRatio);
 
 				cameraRig.StopTracking();
 			}
@@ -200,17 +202,19 @@ namespace Assets.Core.Input
 		protected void DoRightMouseDragPan(PointerActionInfo pointer)
 		{
 			var mouseInfo = pointer as MouseButtonInfo;
+			 
 			if ((mouseInfo != null) &&
 				(mouseInfo.mouseButtonId == 1))
 			{
 				// Calculate zoom ratio
 				float zoomRatio = GetPanSpeedForZoomLevel();
 
-				Vector2 panVector = mouseInfo.currentPosition - mouseInfo.startPosition;
+				Vector2 panVector = (mouseInfo.currentPosition - mouseInfo.startPosition);
 				panVector = (panVector * Time.deltaTime * mouseRmbPanSpeed * zoomRatio) / screenPanThreshold;
 
-				var camVector = new Vector3(panVector.x, 0, panVector.y);
-				cameraRig.PanCamera(camVector);
+				 
+				 
+				cameraRig.PanCamera(panVector);
 
 				cameraRig.StopTracking();
 			}
@@ -226,23 +230,14 @@ namespace Assets.Core.Input
 
 			// Calculate actual zoom change after clamping
 			float zoomChange = cameraRig.CurrentZoomDistance / prevZoomDist;
-
-			// First get floor position of cursor
-			Ray ray = cameraRig.CachedCamera.ScreenPointToRay(UnityInput.mousePosition);
-
-			Vector3 worldPos = Vector3.zero;
-			float dist;
-
-			if (cameraRig.FloorPlane.Raycast(ray, out dist))
-			{
-				worldPos = ray.GetPoint(dist);
-			}
+			Vector3 worldPos = cameraRig.GetRaycastWorldPointOnTargetSurface(UnityInput.mousePosition, Vector3.zero);
+			 
 
 			// Vector from our current look pos to this point 
 			Vector3 offsetValue = worldPos - cameraRig.LookPosition;
 
 			// Pan towards or away from our zoom center
-			cameraRig.PanCamera(offsetValue * (1 - zoomChange));
+			cameraRig.PanCamera(offsetValue * (zoomChange));
 		}
 
 		/// <summary>
@@ -257,17 +252,8 @@ namespace Assets.Core.Input
 			if ((mouseInfo != null) &&
 				(mouseInfo.mouseButtonId == 2))
 			{
-				// First get floor position of cursor
-				Ray ray = cameraRig.CachedCamera.ScreenPointToRay(UnityInput.mousePosition);
-
-				float dist;
-
-				if (cameraRig.FloorPlane.Raycast(ray, out dist))
-				{
-					Vector3 worldPos = ray.GetPoint(dist);
-					cameraRig.PanTo(worldPos);
-				}
-
+				Vector3 worldPos = cameraRig.GetRaycastWorldPointOnTargetSurface(UnityInput.mousePosition, Vector3.zero);
+				cameraRig.PanTo(worldPos);
 				cameraRig.StopTracking();
 			}
 		}

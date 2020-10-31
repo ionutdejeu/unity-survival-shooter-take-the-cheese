@@ -12,7 +12,7 @@ namespace Assets.Core.Input
         protected InputScheme[] m_InputSchemes;
         protected InputScheme m_CurrentScheme;
         protected InputScheme m_DefaultScheme;
-        protected virtual void Awake()
+        protected virtual void Start()
         {
             m_InputSchemes = GetComponents<InputScheme>();
             foreach(InputScheme schem in m_InputSchemes)

@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Debug = System.Diagnostics.Debug;
 using UnityInput = UnityEngine.Input;
 
 namespace Assets.Core.Input
@@ -136,6 +135,7 @@ namespace Assets.Core.Input
 			mouseMovedOnThisFrame = basicMouseInfo.delta.sqrMagnitude >= Mathf.Epsilon;
 			mouseButtonPressedThisFrame = false;
 
+			 
 			// Move event
 			if (basicMouseInfo.delta.sqrMagnitude > Mathf.Epsilon)
 			{
@@ -171,6 +171,7 @@ namespace Assets.Core.Input
 
 						if (pressed != null)
 						{
+							Debug.Log("pressed");
 							pressed(mouseButton);
 						}
 					}
@@ -193,6 +194,7 @@ namespace Assets.Core.Input
 							// Did it just start now?
 							if (!wasDrag)
 							{
+								Debug.Log("startedDrag");
 								if (startedDrag != null)
 								{
 									startedDrag(mouseButton);
@@ -200,12 +202,14 @@ namespace Assets.Core.Input
 							}
 							if (dragged != null)
 							{
+								Debug.Log("Dragged");
 								dragged(mouseButton);
 							}
 
 							// Flick?
 							if (moveDist > flickThreshold)
 							{
+								Debug.Log("Flikered");
 								mouseButton.flickVelocity =
 									(mouseButton.flickVelocity * (1 - k_FlickAccumulationFactor)) +
 									(mouseButton.delta * k_FlickAccumulationFactor);
@@ -225,6 +229,7 @@ namespace Assets.Core.Input
 								mouseButton.isHold = true;
 								if (startedHold != null)
 								{
+									Debug.Log("Flikered");
 									startedHold(mouseButton);
 								}
 							}

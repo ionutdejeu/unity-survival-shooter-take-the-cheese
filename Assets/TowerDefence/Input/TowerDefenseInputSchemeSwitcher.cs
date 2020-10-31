@@ -22,7 +22,7 @@ namespace Assets.TowerDefence.Input
 		/// </summary>
 		protected virtual void Start()
 		{
-			 
+			base.Start();
 		}
 
 		/// <summary>

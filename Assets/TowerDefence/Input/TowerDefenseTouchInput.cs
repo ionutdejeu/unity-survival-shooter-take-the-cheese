@@ -54,9 +54,9 @@ namespace Assets.TowerDefence.Input
 		/// <summary>
 		/// Register input events
 		/// </summary>
-		protected override void OnEnable()
+		protected override void Start()
 		{
-			base.OnEnable();
+			base.Start();
 
 			m_GameUI = GetComponent<GameUI>();
 
@@ -89,13 +89,7 @@ namespace Assets.TowerDefence.Input
 			 
 		}
 
-		/// <summary>
-		/// Hide UI 
-		/// </summary>
-		protected virtual void Awake()
-		{
-			 
-		}
+		 
 
 		/// <summary>
 		/// Decay flick
