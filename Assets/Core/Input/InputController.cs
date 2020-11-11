@@ -168,10 +168,9 @@ namespace Assets.Core.Input
 						mouseButton.wasHold = false;
 						mouseButton.isHold = false;
 						mouseButton.flickVelocity = Vector2.zero;
-
 						if (pressed != null)
 						{
-							Debug.Log("pressed");
+							 
 							pressed(mouseButton);
 						}
 					}
@@ -194,7 +193,6 @@ namespace Assets.Core.Input
 							// Did it just start now?
 							if (!wasDrag)
 							{
-								Debug.Log("startedDrag");
 								if (startedDrag != null)
 								{
 									startedDrag(mouseButton);

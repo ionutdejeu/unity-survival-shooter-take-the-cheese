@@ -9,7 +9,6 @@ namespace Assets.Core.Camera
 {
     public class PlaneCameraRig : CameraRig
     {
-         
         public float floorY;
 
         public Transform zoomCamAngles;
@@ -103,6 +102,7 @@ namespace Assets.Core.Camera
             // Camera position calculated from look position with view vector and zoom dist
             CameraPosition = LookPosition + (GetToCamVector() * CurrentZoomDistance);
         }
+
         public override void PanCamera(Vector3 panDelta)
         {
             Vector3 pos = LookPosition;
