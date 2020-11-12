@@ -33,6 +33,7 @@ namespace Assets.Core.Input
 			get { return m_Touches.Count; }
 		}
 
+
 		public bool mouseButtonPressedThisFrame { get; protected set; }
 
 		public bool mouseMovedOnThisFrame { get; protected set; }
