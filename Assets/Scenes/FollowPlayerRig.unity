@@ -251,7 +251,6 @@ GameObject:
   - component: {fileID: 768393195}
   - component: {fileID: 768393194}
   - component: {fileID: 768393193}
-  - component: {fileID: 768393197}
   - component: {fileID: 768393196}
   m_Layer: 0
   m_Name: Main Camera
@@ -334,11 +333,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 768393192}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63b9c9e9ad9fbf14f81bacfb917d3be7, type: 3}
+  m_Script: {fileID: 11500000, guid: f59f4a117b550cd4db5906b2c36885d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookDampFactor: 2.31
-  movementDampFactor: 3.52
+  lookDampFactor: 0.5
+  movementDampFactor: 0
   nearestZoom: 15
   furthestZoom: 40
   maxZoom: 60
@@ -347,20 +346,6 @@ MonoBehaviour:
   springyZoom: 0
   smoothing: 5
   targetToFollow: {fileID: 826504850}
---- !u!114 &768393197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 768393192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43207f3a91947544f992d0fa00d28977, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startZoomMode: 0
-  initialLookAt: {fileID: 0}
 --- !u!1 &779551799
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,7 +589,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9266cfe2405c7c34785dd264ce8670f7, type: 2}
+  - {fileID: 2100000, guid: 4f872058f1da9344988d8a232bba80d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -756,7 +741,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1207514368
 RectTransform:
   m_ObjectHideFlags: 0
