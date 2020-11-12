@@ -10,7 +10,7 @@ using UnityInput = UnityEngine.Input;
 
 namespace Assets.Core.Input
 {
-	public class PlayerInputController : Singleton<InputController>
+	public class PlayerInputController : Singleton<PlayerInputController>
 	{
 	 
 		const float k_FlickAccumulationFactor = 0.8f;
