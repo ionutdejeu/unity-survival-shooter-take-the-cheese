@@ -16,24 +16,19 @@ namespace Assets.Core.Camera
         private Plane groundPlane;
 
         private Quaternion InitialRotation;
+        
 
         void Awake()
         {
+            
             CachedCamera = GetComponent<UnityEngine.Camera>();
             groundPlane = new Plane(Vector3.up, targetToFollow.transform.position);
-            TrackedObject = targetToFollow;
+           
             InitialRotation = Quaternion.Euler(45f, 45f, 0);
             transform.SetPositionAndRotation(transform.position, InitialRotation);
             CameraPosition = CachedCamera.transform.position;
-
-            Ray lookRay = new Ray(CachedCamera.transform.position, CachedCamera.transform.forward);
-            float dist;
-            if (groundPlane.Raycast(lookRay, out dist))
-            {
-                CurrentLookPosition = LookPosition = lookRay.GetPoint(dist);
-            }
-            RawCurrentZoomDistance = CurrentZoomDistance = 5f;
-            StartTracking(TrackedObject);
+            CurrentLookPosition = LookPosition = GetCameraLookPosition();
+            RawCurrentZoomDistance = CurrentZoomDistance = 5f; 
         }
 
         Vector3 GetCameraLookPosition()
@@ -49,14 +44,17 @@ namespace Assets.Core.Camera
             return lookPos;
         }
 
-        void FixedUpdate()
+        void Update()
         {
+            if (TrackedObject != null)
+            {
+                PanTo(TrackedObject.transform.position);
+            }
             // Approach look position
             Vector3 prevLookPos = CurrentLookPosition;
             CurrentLookPosition = Vector3.SmoothDamp(CurrentLookPosition, LookPosition, ref m_CurrentLookVelocity,
                                                      lookDampFactor);
             Vector3 offset = CurrentLookPosition- prevLookPos;
-            Debug.DrawRay(CurrentLookPosition, offset, Color.green, 10000f);
 
             CameraPosition += offset;
             CachedCamera.transform.position = CameraPosition;
@@ -97,18 +95,20 @@ namespace Assets.Core.Camera
         }
 
         public override void StopTracking()
-        {  
+        {
+            TrackedObject = null;
         }
 
         public void StartTracking(GameObject gO)
         {
-            targetToFollow = gO;
+            TrackedObject = gO;
+            groundPlane = new Plane(Vector3.up, TrackedObject.transform.position);
             PanTo(gO.transform.position);
         }
 
         private void OnDrawGizmos()
         {
-            Gizmos.DrawSphere(CurrentLookPosition, 1f);
+            //Gizmos.DrawSphere(CurrentLookPosition, 1f);
             //Gizmos.DrawSphere(groundPlane.ClosestPointOnPlane(targetToFollow.transform.position), 1f);
         }
     }

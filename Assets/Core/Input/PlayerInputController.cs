@@ -283,21 +283,18 @@ namespace Assets.Core.Input
 		/// </summary>
 		protected void UpdateAxis()
 		{
-			Vector2 dir = new Vector2(UnityInput.GetAxis("Up"), UnityInput.GetAxis("Right"));
 			MovemenAxisInfo axis = new MovemenAxisInfo()
 			{
 				MovemoveDir= MoveDirection.None,
-				moveVector= dir
+				horizontalValue = UnityInput.GetAxis("Horizontal"),
+				verticalValue = UnityInput.GetAxis("Vertical")
 			};
 			 
 			basicAxisInfo = axis;
-			if(dir.sqrMagnitude > movementThreshold * movementThreshold)
-            {
-                if (axisMoved!=null)
-                {
-					axisMoved(basicAxisInfo);
-                }
-            }
+			if (axisMoved != null)
+			{
+				axisMoved(basicAxisInfo);
+			}
 		}
 
 

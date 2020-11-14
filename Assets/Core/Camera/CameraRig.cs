@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Core.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -108,6 +109,10 @@ namespace Assets.Core.Camera
         }
 
 
+        public Vector3 GetForwardVector()
+        {
+            return transform.forward;
+        }
         public Vector3 GetUpVector()
         {
             return transform.up;

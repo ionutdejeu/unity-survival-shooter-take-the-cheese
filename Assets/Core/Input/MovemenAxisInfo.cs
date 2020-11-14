@@ -11,7 +11,11 @@ namespace Assets.Core.Input
     public struct MovemenAxisInfo
 	{
 		public MoveDirection MovemoveDir;
-		public Vector2 moveVector { get; set; }
+		 
+
+		public float horizontalValue { get; set; }
+		public float verticalValue { get; set; }
+
 
 	}
 }
