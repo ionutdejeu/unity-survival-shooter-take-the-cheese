@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerShooting : MonoBehaviour
 {
 
-   
     public int damagePerShot = 20;                 
     public float timeBetweenBullets = 0.15f;       
     public float range = 100f;
@@ -18,7 +17,8 @@ public class PlayerShooting : MonoBehaviour
     int shootableMask;                             
     LineRenderer gunLine;                          
     Light gunLight;                                
-    float effectsDisplayTime = 0.2f;               
+    float effectsDisplayTime = 0.2f;
+    bool shoulFire = false;
 
     void Start()
     {
@@ -26,27 +26,17 @@ public class PlayerShooting : MonoBehaviour
         shootableMask = LayerMask.GetMask("Shootable");
         gunLine = GetComponent<LineRenderer>();
         gunLight = GetComponent<Light>();
+        PlayerInputController.instance.pressed += StartShooting;
+        PlayerInputController.instance.released += StopShooting;
 
-         
+
     }
 
-
-    void BlockShooting()
-    {
-        canShoot = false;
-    }
-    void UnBlockShooting()
-    {
-        canShoot = true;
-    }
-    
-        
-        
-    void ShootHandler(MouseButtonInfo info)
+    private void Update()
     {
         timer += Time.deltaTime;
 
-        if (canShoot && Input.GetButton("Fire1") && timer >= timeBetweenBullets)
+        if (canShoot && shoulFire && timer >= timeBetweenBullets)
         {
             Shoot();
         }
@@ -55,6 +45,16 @@ public class PlayerShooting : MonoBehaviour
         {
             DisableEffects();
         }
+    }
+
+    void StopShooting(PointerActionInfo info)
+    {
+        shoulFire = false;
+    }
+    void StartShooting(PointerActionInfo info)
+    {
+           
+        shoulFire = true;
     }
     
     public void DisableEffects()
@@ -71,14 +71,12 @@ public class PlayerShooting : MonoBehaviour
         gunLight.enabled = true;
 
         gunLine.enabled = true;
-        gunLine.SetPosition(0, Vector3.zero);
+        gunLine.SetPosition(0, transform.position);
 
         shootRay.origin = transform.position;
         shootRay.direction = transform.forward;
 
-         
-         
-        gunLine.SetPosition(1, Vector3.forward * range);
+        gunLine.SetPosition(1, transform.forward * range);
         
     }
 }

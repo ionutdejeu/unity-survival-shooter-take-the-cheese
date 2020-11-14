@@ -21,6 +21,7 @@ namespace Assets.TakeTheCheese.Player
 		private Rigidbody playerRigidbody;
 		private int floorMask;
 		private float camRayLength = 100f;
+		bool willMove = false;
 
 		void Awake()
         {
@@ -39,12 +40,16 @@ namespace Assets.TakeTheCheese.Player
 
         private void Update()
         {
-            
-        }
+            if (willMove) { 
+				playerRigidbody.MovePosition(transform.position + movement * speed * Time.deltaTime);
+				 
+				willMove = false;
+			}
+
+		}
 
 		void movementInput(MovemenAxisInfo info)
         {
-			
 			Vector3 f = rig.GetForwardVector();
 			f.y = 0f;
 			Vector3 r = rig.GetRightVector();
@@ -52,10 +57,10 @@ namespace Assets.TakeTheCheese.Player
 			f.Normalize();
 			r.Normalize();
 			movement = f * info.verticalValue + r * info.horizontalValue;
-			movement = movement.normalized * speed * Time.deltaTime;
-			
-			playerRigidbody.MovePosition(transform.position + movement);
+			movement = movement.normalized ;
+			willMove = true;
 		}
+
 		void shoot()
         {
 
@@ -72,7 +77,8 @@ namespace Assets.TakeTheCheese.Player
 			Vector3 playerToMouse = turnTwards - transform.position;
 			playerToMouse.y = 0f;
 			Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
-			playerRigidbody.MoveRotation(newRotation);	
+			transform.rotation = newRotation;
+			//playerRigidbody.MoveRotation(newRotation);	
 		}
 
 	}
